@@ -3,7 +3,7 @@
             <nav class="navbar navbar-default">
                 <div class="container">
                     <a class="navbar-brand" id="logo" href="">
-                        Laravel Demo
+                        Booking List & Detail
                     </a>
                     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                         <ul class="nav navbar-nav navbar-right hidden-sm">
