@@ -4,31 +4,23 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-use DB;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
+use App\User;
 
-class DashboardController extends Controller
+class UsersController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request)
+    public function index()
     {
-        //$results = DB::select('select * from forge.BookingInfo where resalerCd = ?', [1]);
         //
-        $user = $request->user();
-        $user_name = $user['name'];
-        if( $user_name == 'BOOKJP'){
-            $bookinginfos = DB::table('BookingInfo')->orderBy('orderId', 'desc')->paginate(20);
-        }else{
-            $bookinginfos = DB::table('BookingInfo')->where('resalerCd', $user_name)->orderBy('orderId', 'desc')->paginate(20);
-        }
-        return view('auth.index', compact('bookinginfos', 'user_name'));
-        //
-        //return view('auth.index');
+        $query = User::query();
+        $users = $query->orderBy('id','desc')->paginate(10);
+        return view('users.index')->with('users',$users);
     }
 
     /**
@@ -39,6 +31,7 @@ class DashboardController extends Controller
     public function create()
     {
         //
+        return view('users.create');
     }
 
     /**
@@ -49,7 +42,18 @@ class DashboardController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        //userオブジェクト生成
+        $user = User::create();
+
+        //値の登録
+        $user->name = $request->name;
+        $user->email = $request->email;
+
+        //保存
+        $user->save();
+
+        //一覧にリダイレクト
+        return redirect()->to('/users');
     }
 
     /**
@@ -60,10 +64,7 @@ class DashboardController extends Controller
      */
     public function show($id)
     {
-        //$bookinginfo = BookingInfo::findOrFail($id);    //BookingInBookingInfo::findOrFail($id);
-        $bookinginfo = DB::table('BookingInfo')->where('orderId', $id)->get()[0];
-        //$bookinginfo = DB::table('BookingInfo')->get();
-        return view('bookinginfos.show', compact('bookinginfo'));
+        //
     }
 
     /**
